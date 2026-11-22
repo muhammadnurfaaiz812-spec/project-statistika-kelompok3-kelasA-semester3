@@ -1,0 +1,310 @@
+/* ==========================================================================
+   StatKit · css/probabilitas-ui.css
+   Lapisan UI/UX + animasi untuk Probabilitas. Muat SETELAH probabilitas.css.
+   Gerak hanya merespons aksi pengguna; momen utamanya: angka berhitung naik,
+   batang proporsi Bayes tumbuh, dan langkah penyelesaian "tersingkap".
+   ========================================================================== */
+
+:root {
+    --ease: cubic-bezier(.22, .8, .24, 1);
+    --ease-io: cubic-bezier(.4, 0, .2, 1);
+    --nav-h: 56px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+    transition: box-shadow .25s var(--ease-io);
+}
+
+.site-header.is-scrolled {
+    box-shadow: 0 6px 24px rgba(20, 54, 43, .28);
+}
+
+.brand-mark {
+    transition: transform .45s var(--ease);
+}
+
+.brand:hover .brand-mark {
+    transform: rotate(-6deg) scale(1.08);
+}
+
+.main-nav a {
+    position: relative;
+}
+
+.main-nav a:not([aria-current])::after {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: .3rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform .25s var(--ease);
+}
+
+.main-nav a:not([aria-current]):hover::after {
+    transform: scaleX(1);
+}
+
+/* ---------- Tombol ---------- */
+.btn-primary,
+.btn-secondary {
+    transition: background-color .15s, border-color .15s, color .15s, transform .18s var(--ease), box-shadow .2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(180, 83, 9, .28);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    transform: scale(.97);
+    box-shadow: none;
+}
+
+/* Input diubah setelah dihitung → tombol berdenyut sampai ditekan */
+.btn-primary.is-dirty {
+    animation: pulse-ring 1.6s var(--ease-io) infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 rgba(180, 83, 9, .45);
+    }
+
+    70%,
+    100% {
+        box-shadow: 0 0 0 12px rgba(180, 83, 9, 0);
+    }
+}
+
+/* ---------- Submenu: indikator geser (diisi oleh JS) ---------- */
+.has-pill {
+    position: relative;
+    isolation: isolate;
+}
+
+.switch-pill {
+    position: absolute;
+    z-index: -1;
+    top: .25rem;
+    bottom: .25rem;
+    left: 0;
+    width: var(--w, 0);
+    transform: translateX(var(--x, 0));
+    border-radius: var(--radius-sm);
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(20, 54, 43, .18), 0 4px 10px rgba(20, 54, 43, .06);
+    transition: transform .35s var(--ease), width .35s var(--ease);
+}
+
+.switch-pill.no-tr {
+    transition: none;
+}
+
+.has-pill button[aria-selected="true"] {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Panel & kolom yang muncul masuk dengan lembut */
+.panel:not([hidden]),
+#wrapper-pab:not([hidden]) {
+    animation: panel-in .3s var(--ease);
+}
+
+@keyframes panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* ---------- Kolom salah: bergetar sekali ---------- */
+.field input[aria-invalid="true"] {
+    animation: shake .4s var(--ease-io);
+}
+
+@keyframes shake {
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+/* ---------- Hasil ---------- */
+.flash {
+    animation: flash .9s var(--ease-io);
+}
+
+@keyframes flash {
+    0% {
+        background-color: rgba(246, 176, 74, .4);
+        border-radius: 6px;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+/* Langkah penyelesaian tersingkap dari atas ke bawah */
+.wipe {
+    animation: wipe .75s var(--ease);
+}
+
+@keyframes wipe {
+    from {
+        clip-path: inset(0 0 100% 0);
+    }
+
+    to {
+        clip-path: inset(0);
+    }
+}
+
+/* Chip status: hijau bila "Ya" */
+.status span::before {
+    content: "";
+    display: inline-block;
+    width: .5rem;
+    height: .5rem;
+    margin-right: .45rem;
+    border-radius: 50%;
+    background: var(--line-strong);
+    transition: background-color .25s;
+}
+
+.status span {
+    transition: background-color .25s, border-color .25s, color .25s;
+}
+
+.status span.is-yes {
+    background: var(--forest-tint);
+    border-color: var(--forest-border);
+    color: var(--success);
+}
+
+.status span.is-yes::before {
+    background: var(--success);
+}
+
+/* ---------- Kembali ke atas ---------- */
+.to-top {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(1rem + var(--safe-b));
+    z-index: 150;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--forest-dark);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(20, 54, 43, .35);
+    opacity: 0;
+    transform: translateY(12px) scale(.8);
+    pointer-events: none;
+    transition: opacity .25s, transform .3s var(--ease), background-color .15s;
+}
+
+.to-top.is-show {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+
+.to-top:hover {
+    background: var(--forest-mid);
+}
+
+/* ---------- Ponsel: navigasi di bawah, header ringkas ---------- */
+@media (max-width: 600px) {
+    .site-header {
+        position: sticky;
+    }
+
+    .site-header .container {
+        flex-direction: row;
+        align-items: center;
+        min-height: 56px;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+    }
+
+    .main-nav {
+        position: fixed;
+        inset: auto 0 0 0;
+        z-index: 120;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        padding-bottom: var(--safe-b);
+        background: var(--forest-dark);
+        border-top: 1px solid rgba(255, 255, 255, .14);
+        box-shadow: 0 -6px 20px rgba(20, 54, 43, .25);
+    }
+
+    .main-nav a,
+    .main-nav a[aria-current="page"] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: var(--nav-h);
+        padding: 0 .5rem;
+        border-radius: 0;
+        background: transparent;
+        font-size: var(--fs-xs);
+    }
+
+    .main-nav a[aria-current="page"] {
+        color: #fff;
+        background: rgba(255, 255, 255, .1);
+        box-shadow: inset 0 3px 0 var(--gold);
+    }
+
+    .main-nav a::after {
+        display: none;
+    }
+
+    .site-footer {
+        padding-bottom: calc(1.25rem + var(--nav-h) + var(--safe-b));
+    }
+
+    .to-top {
+        bottom: calc(var(--nav-h) + var(--safe-b) + 1rem);
+    }
+}
+
+/* ---------- Aksesibilitas & cetak ---------- */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+@media print {
+
+    .to-top,
+    .main-nav {
+        display: none !important;
+    }
+}

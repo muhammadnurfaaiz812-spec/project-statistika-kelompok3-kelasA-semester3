@@ -1,239 +1,343 @@
 /* ==========================================================================
-   STATKIT — BOTANICAL FOREST & BURNISHED GOLD EDITORIAL THEME
-   (100% Solid Flat Colors — Deep Forest Green & Gold — Zero Gradients)
+   StatKit · css/probabilitas.css — Halaman Kalkulator Probabilitas
+   Sistem desain sama dengan statistika.css (token, tipografi, header, form).
+   Font: Plus Jakarta Sans (UI & angka) + JetBrains Mono (input & langkah hitung),
+   dimuat lewat <link> di probabilitas.html, jadi tidak ada @import di sini.
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Palet Warna Utama (Solid & Berkarakter) */
-    --forest-dark: #14362b;        /* Hijau hutan pekat untuk header & navigasi */
+    --forest-dark: #14362b;
     --forest-mid: #1d4d3e;
-    --forest-tint: #ebf5f0;
-    --forest-border: #a7d7c5;
-
-    /* Kuning Keemasan Solid (Pengganti Merah) */
-    --gold-primary: #d97706;       /* Emas hangat solid untuk tombol & garis aksen */
-    --gold-hover: #b45309;         /* Emas tua solid saat tombol diarahkan kursor */
-    --gold-deep: #92400e;          /* Emas kecokelatan pekat untuk teks angka hasil */
-    --gold-tint: #fef9c3;          /* Kuning krem lembut untuk kotak hasil & rumus */
-    --gold-border: #fde047;
-
-    --teal-bar: #0f766e;           /* Teal solid untuk True Positive */
-    --amber-bar: #d97706;          /* Emas solid untuk False Positive */
-
-    /* Permukaan & Teks */
-    --bg-canvas: #f4f1ea;          /* Krem hangat alami */
+    --forest-tint: #eef6f2;
+    --forest-border: #b9dccd;
+    --gold: #d97706;
+    --cta: #b45309;
+    --cta-hover: #92400e;
+    --gold-tint: #fef9e7;
+    --gold-border: #f6dc8a;
+    --teal-bar: #0f766e;
+    --bg-canvas: #f5f2eb;
     --bg-card: #ffffff;
-    --bg-well: #f8f6f0;
-    --bg-terminal: #111c18;        /* Hijau arang gelap untuk walkthrough */
-
+    --bg-well: #faf8f3;
+    --bg-terminal: #111c18;
     --ink-main: #18221e;
     --ink-body: #374640;
-    --ink-muted: #64746e;
-
+    --ink-muted: #5f6f68;
+    --line: #e2ddd0;
+    --line-strong: #cfc9b9;
+    --success: #087a50;
     --danger: #b91c1c;
     --danger-bg: #fef2f2;
     --danger-border: #fecaca;
 
-    /* Garis & Radius */
-    --border-line: #d6d1c4;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+    --fs-xs: 0.8125rem;
+    --fs-sm: 0.875rem;
+    --fs-md: 0.9375rem;
+    --fs-lg: 1.125rem;
+    --fs-xl: 1.5rem;
 
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow: 0 1px 2px rgba(20, 54, 43, 0.05), 0 4px 14px rgba(20, 54, 43, 0.05);
+    --ring: 0 0 0 3px rgba(29, 77, 62, 0.16);
     --transition: 150ms ease;
-    --font-serif: 'Fraunces', Georgia, serif;
-    --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --header-h: 71px;
 }
 
-/* ==========================================================================
-   1. RESET & DASAR
-   ========================================================================== */
+/* ---------- 1. Reset & dasar ---------- */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-    font-family: var(--font-sans);
-    background-color: var(--bg-canvas);
-    color: var(--ink-body);
-    line-height: 1.6;
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
+    background: var(--bg-canvas);
+    color: var(--ink-body);
+    font-family: var(--font-sans);
+    font-size: var(--fs-md);
+    line-height: 1.6;
+    letter-spacing: 0.005em;
     -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+::selection {
+    background: var(--forest-border);
+    color: var(--forest-dark);
+}
+
+:focus-visible {
+    outline: 2px solid var(--forest-mid);
+    outline-offset: 2px;
+}
+
+main:focus {
+    outline: none;
 }
 
 .container {
     width: 100%;
-    max-width: 1140px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 0 1.25rem;
 }
 
-/* ==========================================================================
-   2. HEADER & NAVIGASI UTAMA (SOLID DEEP FOREST GREEN + GOLD LINE)
-   ========================================================================== */
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 200;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--forest-dark);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--shadow);
+}
+
+.skip-link:focus {
+    top: 0.75rem;
+}
+
+/* ---------- 2. Header & navigasi (identik dengan Statistika) ---------- */
 .site-header {
-    background-color: var(--forest-dark);
-    color: #ffffff;
-    border-bottom: 4px solid var(--gold-primary);
     position: sticky;
     top: 0;
     z-index: 100;
+    background: var(--forest-dark);
+    color: #fff;
+    border-bottom: 3px solid var(--gold);
 }
 
 .site-header .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 66px;
+    gap: 1rem;
+    min-height: 68px;
 }
 
 .brand {
-    font-family: var(--font-serif);
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-decoration: none;
-    letter-spacing: -0.02em;
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.7rem;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
-.brand::before {
-    content: "∫";
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-    font-weight: 700;
-    background-color: var(--gold-primary);
-    color: #ffffff;
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.brand:focus-visible {
+    outline-color: #fff;
+    outline-offset: 4px;
     border-radius: var(--radius-sm);
+}
+
+.brand-mark {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    display: block;
+}
+
+.bm-tile {
+    fill: var(--forest-mid);
+    stroke: rgba(255, 255, 255, 0.18);
+    stroke-width: 1;
+}
+
+.bm-bars {
+    fill: #eaf3ee;
+}
+
+.bm-halo,
+.bm-curve {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.bm-halo {
+    stroke: var(--forest-mid);
+    stroke-width: 5.6;
+}
+
+.bm-curve {
+    stroke: #f59e0b;
+    stroke-width: 2.8;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.brand-name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.brand-name span {
+    color: #f6b04a;
+}
+
+.brand-sub {
+    margin-top: 0.3rem;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: #a9c5b9;
 }
 
 .main-nav {
     display: flex;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .main-nav a {
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: #b7cfc6;
-    padding: 0.5rem 0.95rem;
+    padding: 0.5rem 1rem;
     border-radius: var(--radius-sm);
-    transition: var(--transition);
+    color: #bcd3c9;
+    text-decoration: none;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    transition: color var(--transition), background-color var(--transition);
 }
 
 .main-nav a:hover {
-    color: #ffffff;
-    background-color: var(--forest-mid);
+    color: #fff;
+    background: var(--forest-mid);
+}
+
+.main-nav a:focus-visible {
+    outline-color: #fff;
 }
 
 .main-nav a[aria-current="page"] {
     color: var(--forest-dark);
-    background-color: #ffffff;
+    background: #fff;
     font-weight: 700;
 }
 
-/* ==========================================================================
-   3. PAGE HEADER & SUB-NAVIGASI TABS
-   ========================================================================== */
+/* ---------- 3. Judul halaman & submenu ---------- */
 main.container {
     flex: 1;
-    padding-top: 2rem;
-    padding-bottom: 3.5rem;
+    padding-top: 2.25rem;
+    padding-bottom: 4rem;
 }
 
 .page-header {
     margin-bottom: 1.75rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--border-line);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.75rem;
+}
+
+.eyebrow {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--cta-hover);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 0.01em;
 }
 
 .page-header h1 {
-    font-family: var(--font-serif);
-    font-size: 2.25rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
     color: var(--forest-dark);
+    font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
 }
 
 .page-header p {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--ink-main);
-    background-color: var(--gold-tint);
-    border: 1px solid var(--gold-border);
-    padding: 0.35rem 0.8rem;
-    border-radius: var(--radius-sm);
+    max-width: 62ch;
+    margin-bottom: 0.9rem;
+    color: var(--ink-muted);
 }
 
-/* Tab Navigasi Solid */
+.format-badge {
+    display: inline-block;
+    max-width: 100%;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--gold-tint);
+    border: 1px solid var(--gold-border);
+    color: #78350f;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Submenu bergaya sama dengan pemilih mode di Statistika */
 .sub-nav {
     display: inline-flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    background-color: #e8e3d7;
-    padding: 0.35rem;
+    gap: 0.25rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0.25rem;
     border-radius: var(--radius-md);
-    border: 1px solid var(--border-line);
-    margin-bottom: 1.75rem;
+    background: #ece8dc;
 }
 
 .sub-nav button {
-    appearance: none;
-    border: none;
-    background-color: transparent;
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--ink-body);
-    padding: 0.6rem 1.2rem;
+    padding: 0.55rem 1.1rem;
+    border: 0;
     border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: var(--transition);
+    background: transparent;
+    color: var(--ink-body);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    transition: color var(--transition), background-color var(--transition), box-shadow var(--transition);
 }
 
 .sub-nav button:hover {
     color: var(--forest-dark);
-    background-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .sub-nav button[aria-selected="true"] {
-    background-color: var(--forest-dark);
-    color: #ffffff;
+    color: var(--forest-dark);
+    background: #fff;
     font-weight: 700;
+    box-shadow: 0 1px 3px rgba(20, 54, 43, 0.16);
 }
 
-/* ==========================================================================
-   4. GRID PANEL & KARTU
-   ========================================================================== */
-.panel[hidden] {
-    display: none !important;
-}
-
+/* ---------- 4. Tata letak ---------- */
 #panel-dasar.layout {
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 370px minmax(0, 1fr);
     gap: 1.5rem;
     align-items: start;
 }
@@ -245,342 +349,427 @@ main.container {
 
 #panel-bayes .layout {
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 340px minmax(0, 1fr);
     gap: 1.75rem;
     align-items: start;
 }
 
 #panel-distribusi:not([hidden]) {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
     align-items: start;
 }
 
+.results-col {
+    min-width: 0;
+}
+
+/* ---------- 5. Kartu ---------- */
 .card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-line);
-    border-top: 4px solid var(--forest-dark);
+    min-width: 0;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
     border-radius: var(--radius-lg);
-    padding: 1.75rem;
-    box-shadow: 0 2px 8px rgba(20, 54, 43, 0.05);
+    box-shadow: var(--shadow);
 }
 
 .card h2 {
-    font-family: var(--font-serif);
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--forest-dark);
     margin-bottom: 1.1rem;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--border-line);
+    color: var(--forest-dark);
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
 }
 
 .card h3 {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    margin: 1.25rem 0 0.5rem;
+    color: var(--ink-main);
+    font-size: var(--fs-sm);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+}
+
+.card-desc {
+    margin: -0.4rem 0 1.1rem;
     color: var(--ink-muted);
-    margin: 1.35rem 0 0.55rem;
+    font-size: var(--fs-xs);
+    line-height: 1.5;
 }
 
-/* Kotak Rumus */
 .formula {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--gold-deep);
-    background-color: var(--gold-tint);
-    border: 1px solid var(--gold-border);
-    border-left: 4px solid var(--gold-primary);
+    margin-bottom: 1.2rem;
     padding: 0.65rem 0.95rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.25rem;
     overflow-x: auto;
+    border: 1px solid var(--gold-border);
+    border-left: 4px solid var(--gold);
+    border-radius: var(--radius-sm);
+    background: var(--gold-tint);
+    color: #78350f;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    line-height: 1.6;
 }
 
-/* ==========================================================================
-   5. FORMULIR, INPUT & TOMBOL (SOLID GOLD & FOREST)
-   ========================================================================== */
+/* ---------- 6. Form ---------- */
 .field {
     margin-bottom: 1rem;
 }
 
-.field[hidden] {
-    display: none;
-}
-
 .field label {
     display: block;
-    font-size: 0.825rem;
-    font-weight: 700;
+    margin-bottom: 0.45rem;
     color: var(--ink-main);
-    margin-bottom: 0.35rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
 }
 
 .field input,
 .field select {
+    display: block;
     width: 100%;
-    padding: 0.625rem 0.85rem;
-    font-family: var(--font-mono);
-    font-size: 0.925rem;
-    font-weight: 500;
-    color: var(--ink-main);
-    background-color: var(--bg-well);
-    border: 1.5px solid var(--border-line);
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid var(--line-strong);
     border-radius: var(--radius-sm);
-    transition: var(--transition);
+    background: var(--bg-well);
+    color: var(--ink-main);
+    transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
+}
+
+.field input {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+}
+
+.field select {
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.5rem;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%235f6f68' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+}
+
+.field input:hover,
+.field select:hover {
+    border-color: var(--ink-muted);
 }
 
 .field input:focus,
 .field select:focus {
     outline: none;
-    background-color: #ffffff;
-    border-color: var(--gold-primary);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16);
+    border-color: var(--forest-mid);
+    background-color: #fff;
+    box-shadow: var(--ring);
 }
 
+.field input[aria-invalid="true"] {
+    border-color: var(--danger);
+    background-color: var(--danger-bg);
+}
+
+.field input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.16);
+}
+
+.cond-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.85rem;
+    align-items: end;
+}
+
+.cond-grid .field {
+    margin-bottom: 0;
+}
+
+/* ---------- 7. Tombol ---------- */
 .actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.65rem;
-    margin-top: 1.25rem;
+    margin-top: 1.4rem;
 }
 
-/* Tombol Utama (Solid Burnished Gold) */
-button[type="submit"],
-#btn-cond,
-#btn-bin,
-#btn-poi {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
+.btn-primary,
+.btn-secondary {
+    min-height: 44px;
+    padding: 0.65rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
     font-weight: 700;
-    background-color: var(--gold-primary);
-    color: #ffffff;
-    border: 1px solid var(--gold-primary);
-    padding: 0.65rem 1.35rem;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: var(--transition);
+    line-height: 1.2;
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition);
 }
 
-button[type="submit"]:hover,
-#btn-cond:hover,
-#btn-bin:hover,
-#btn-poi:hover {
-    background-color: var(--gold-hover);
-    border-color: var(--gold-hover);
+.btn-primary {
+    border: 1px solid var(--cta);
+    background: var(--cta);
+    color: #fff;
 }
 
-button[type="submit"]:active,
-#btn-cond:active,
-#btn-bin:active,
-#btn-poi:active {
-    transform: translateY(1px);
+.btn-primary:hover {
+    background: var(--cta-hover);
+    border-color: var(--cta-hover);
 }
 
-/* Tombol Reset (Solid Sand) */
-button[type="button"]:not(#btn-cond):not(#btn-bin):not(#btn-poi) {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 600;
-    background-color: var(--bg-well);
+.btn-secondary {
+    border: 1.5px solid var(--line-strong);
+    background: #fff;
     color: var(--ink-main);
-    border: 1.5px solid var(--border-line);
-    padding: 0.65rem 1.15rem;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: var(--transition);
+    font-weight: 600;
 }
 
-button[type="button"]:not(#btn-cond):not(#btn-bin):not(#btn-poi):hover {
-    background-color: #e5e0d3;
+.btn-secondary:hover {
+    background: var(--bg-well);
     border-color: var(--ink-muted);
 }
 
-/* ==========================================================================
-   6. KPI GRID & KOTAK HASIL
-   ========================================================================== */
+/* ---------- 8. Hasil ---------- */
 .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-    gap: 0.8rem;
-    margin-bottom: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.15rem;
+}
+
+.kpi-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .kpi {
-    background-color: var(--forest-tint);
-    border: 1px solid var(--forest-border);
-    border-radius: var(--radius-md);
-    padding: 0.85rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 0;
+    padding: 0.95rem 1.05rem;
+    background: var(--forest-tint);
+    border: 1px solid var(--forest-border);
+    border-radius: var(--radius-md);
+}
+
+.kpi-highlight {
+    background: var(--gold-tint);
+    border-color: var(--gold-border);
 }
 
 .kpi-label {
-    font-size: 0.78rem;
-    font-weight: 600;
     color: var(--forest-mid);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.kpi-highlight .kpi-label {
+    color: #78350f;
 }
 
 .kpi strong {
-    font-family: var(--font-mono);
-    font-size: 1.35rem;
-    font-weight: 700;
     color: var(--forest-dark);
+    font-size: clamp(1.2rem, 1rem + 0.7vw, var(--fs-xl));
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
 }
 
-/* Kotak Hasil P(A|B) dan Distribusi (Nuansa Kuning Keemasan) */
-.card > p:has(strong) {
+.kpi-highlight strong {
+    color: #78350f;
+}
+
+.result-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
     margin-top: 0.9rem;
-    padding: 0.75rem 1rem;
-    background-color: var(--gold-tint);
+    padding: 0.8rem 1rem;
     border: 1px solid var(--gold-border);
     border-radius: var(--radius-sm);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    font-weight: 700;
+    background: var(--gold-tint);
     color: var(--ink-main);
+    font-size: var(--fs-sm);
+    font-weight: 600;
 }
 
-.card > p:has(strong) strong {
-    font-family: var(--font-mono);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--gold-deep);
+.result-banner strong {
+    color: #78350f;
+    font-size: var(--fs-lg);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
 }
 
-#cond-interpretasi:not(:empty) {
+.interp-text:not(:empty) {
     margin-top: 0.75rem;
-    font-size: 0.885rem;
-    color: var(--ink-body);
+    padding: 0.7rem 0.9rem;
+    border-left: 3px solid var(--forest-dark);
+    border-radius: 4px;
+    background: var(--bg-well);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
 }
 
-/* Status Chips */
 .status {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 1rem;
 }
 
 .status span {
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    font-weight: 600;
     padding: 0.3rem 0.75rem;
+    border: 1px solid var(--line);
     border-radius: var(--radius-sm);
-    background-color: var(--bg-well);
+    background: var(--bg-well);
     color: var(--forest-dark);
-    border: 1px solid var(--border-line);
-}
-
-/* Terminal Langkah Perhitungan */
-#formula-walkthrough {
-    background-color: var(--bg-terminal);
-    color: #e6f2ed;
-    padding: 1.1rem 1.25rem;
-    border-radius: var(--radius-md);
     font-family: var(--font-mono);
-    font-size: 0.825rem;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    overflow-x: auto;
+    font-size: var(--fs-xs);
+    font-weight: 500;
 }
 
-/* ==========================================================================
-   7. VISUALISASI PROPORSI BAYES & CALLOUT
-   ========================================================================== */
+/* Langkah penyelesaian: tidak dibungkus agar perataan tanda "=" tetap rapi, digulir menyamping */
+#formula-walkthrough,
+#bayes-walkthrough {
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    background: var(--bg-terminal);
+    color: #e6f2ed;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: 1.75;
+    white-space: pre;
+    -webkit-overflow-scrolling: touch;
+}
+
+#formula-walkthrough:focus-visible,
+#bayes-walkthrough:focus-visible {
+    outline-offset: 3px;
+}
+
+/* ---------- 9. Proporsi Bayes & callout ---------- */
+.proportion-wrap {
+    margin: 1.1rem 0;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--bg-well);
+}
+
+.proportion-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.35rem 1rem;
+    margin-bottom: 0.6rem;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+}
+
+.legend-tp {
+    color: var(--teal-bar);
+}
+
+.legend-fp {
+    color: var(--cta-hover);
+}
+
 .proportion {
     display: flex;
-    height: 32px;
-    border-radius: var(--radius-sm);
+    height: 22px;
     overflow: hidden;
-    background-color: var(--bg-well);
-    border: 1px solid var(--border-line);
-    margin: 1.2rem 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: #e5e0d3;
 }
 
 .bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    font-weight: 700;
-    color: #ffffff;
-    white-space: nowrap;
-    padding: 0 0.6rem;
-    transition: width 0.35s ease;
+    height: 100%;
+    transition: width 0.5s cubic-bezier(.22, .8, .24, 1);
 }
 
 .bar-tp {
-    background-color: var(--teal-bar);
+    background: var(--teal-bar);
 }
 
 .bar-fp {
-    background-color: var(--amber-bar);
+    background: var(--gold);
 }
 
 .callout {
-    background-color: var(--bg-well);
-    border: 1px solid var(--border-line);
-    border-left: 4px solid var(--gold-primary);
-    border-radius: var(--radius-sm);
     padding: 0.95rem 1.15rem;
+    border: 1px solid var(--forest-border);
+    border-left: 4px solid var(--forest-dark);
+    border-radius: var(--radius-sm);
+    background: var(--forest-tint);
 }
 
 .callout h3 {
     margin-top: 0;
-    margin-bottom: 0.3rem;
-    color: var(--gold-deep);
+    margin-bottom: 0.35rem;
+    color: var(--forest-dark);
 }
 
 .callout p {
-    font-size: 0.885rem;
-    color: var(--ink-body);
+    color: var(--ink-main);
+    font-size: var(--fs-sm);
+    line-height: 1.65;
 }
 
-/* ==========================================================================
-   8. ALERT & FOOTER
-   ========================================================================== */
+/* ---------- 10. Pesan & footer ---------- */
 .alert {
-    margin-top: 0.95rem;
+    margin-top: 1rem;
     padding: 0.7rem 0.95rem;
-    border-radius: var(--radius-sm);
-    background-color: var(--danger-bg);
-    color: var(--danger);
     border: 1px solid var(--danger-border);
-    font-size: 0.825rem;
+    border-radius: var(--radius-sm);
+    background: var(--danger-bg);
+    color: var(--danger);
+    font-size: var(--fs-sm);
     font-weight: 600;
+    line-height: 1.5;
 }
 
-.alert[hidden] {
-    display: none;
+main>.alert {
+    margin: 0 0 1.25rem;
 }
 
 .site-footer {
-    background-color: var(--forest-dark);
-    color: #b7cfc6;
-    border-top: 3px solid var(--gold-primary);
     padding: 1.25rem;
+    background: var(--forest-dark);
+    color: #a9c5b9;
+    border-top: 3px solid var(--gold);
     text-align: center;
-    font-size: 0.825rem;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
 }
 
-/* ==========================================================================
-   9. RESPONSIVE DESIGN
-   ========================================================================== */
-@media (max-width: 840px) {
+/* ---------- 11. Responsif ---------- */
+@media (max-width: 960px) {
+
     #panel-dasar.layout,
     #panel-bayes .layout,
     #panel-distribusi:not([hidden]) {
+        grid-template-columns: 1fr;
+    }
+
+    .cond-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cond-action .btn-primary {
+        width: 100%;
+    }
+
+    .kpi-grid-2 {
         grid-template-columns: 1fr;
     }
 
@@ -591,19 +780,148 @@ button[type="button"]:not(#btn-cond):not(#btn-bin):not(#btn-poi):hover {
 
     .sub-nav button {
         flex: 1;
-        text-align: center;
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 600px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    main.container {
+        padding-top: 1.5rem;
+        padding-bottom: 3rem;
+    }
+
+    .site-header {
+        position: static;
+    }
+
     .site-header .container {
         flex-direction: column;
-        height: auto;
-        padding: 0.85rem 1rem;
-        gap: 0.5rem;
+        align-items: stretch;
+        gap: 0.6rem;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        min-height: 0;
+    }
+
+    .brand-sub {
+        display: none;
+    }
+
+    .brand-mark {
+        width: 34px;
+        height: 34px;
+    }
+
+    .main-nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.35rem;
+    }
+
+    .main-nav a {
+        padding: 0.6rem 0.4rem;
+        text-align: center;
+        background: var(--forest-mid);
+    }
+
+    .main-nav a[aria-current="page"] {
+        background: #fff;
+    }
+
+    /* Tiga submenu dibagi rata dan boleh dua baris agar tidak terpotong */
+    .sub-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .sub-nav button {
+        padding: 0.55rem 0.3rem;
+        font-size: var(--fs-xs);
+        line-height: 1.35;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .card {
+        padding: 1.15rem;
     }
 
     .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* 16px mencegah Safari iOS memperbesar layar saat input difokuskan */
+    .field input,
+    .field select {
+        font-size: 1rem;
+    }
+
+    .actions .btn-primary {
+        flex: 1;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .site-header {
+        position: static;
+    }
+}
+
+@media (pointer: coarse) {
+
+    .sub-nav button,
+    .main-nav a {
+        min-height: 44px;
+    }
+
+    .main-nav a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ---------- 12. Cetak ---------- */
+@media print {
+    body {
+        background: #fff;
+    }
+
+    .site-header,
+    .site-footer,
+    .skip-link,
+    .sub-nav,
+    .actions {
+        display: none !important;
+    }
+
+    .panel {
+        display: block !important;
+    }
+
+    .card {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    #formula-walkthrough,
+    #bayes-walkthrough {
+        white-space: pre-wrap;
+        background: #fff;
+        color: #000;
+        border: 1px solid #999;
     }
 }
